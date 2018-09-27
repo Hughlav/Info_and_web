@@ -2,9 +2,9 @@ package data_objects;
 
 public class CranDocument
 {
-    String Index;
-    String Title;
-    String Authors;
-    String Bib;
-    String Words;
+    public int Index;
+    public String Title;
+    public String Authors;
+    public String Bib;
+    public String Words;
 }
