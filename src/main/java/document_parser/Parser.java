@@ -1,4 +1,4 @@
-package documentparser;
+package document_parser;
 import data_objects.CranDocument;
 
 import java.io.IOException;
@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 
 public class Parser
 {
-    static String pathToFile = "";
-    private static String docsString = "";
-    private static String[] docs;
+    String pathToFile = "";
+    private String docsString = "";
+    private String[] docs;
 
     public ArrayList<CranDocument> documents = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class Parser
         parseDocs();
     }
 
-    private static void readDocs() {
+    private void readDocs() {
         try {
             try (
                     Stream<String> stream = Files.lines(Paths.get(pathToFile))) {
@@ -54,7 +54,6 @@ public class Parser
         LinkedList<String> docLines = new LinkedList<String>(Arrays.asList(doc.split("\n")));
 
         String docNum = docLines.remove(0);
-        System.out.println(docNum);
 
         document.Index = Integer.parseInt(docNum.trim());
 

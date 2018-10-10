@@ -1,54 +1,35 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+package ie.tcd.laveryhu.info_and_web;
+
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import data_objects.CranDocument;
-import documentparser.Parser;
+import document_parser.Parser;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.KeywordAnalyzer;
-import org.apache.lucene.analysis.core.StopAnalyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.standard.ClassicAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.codecs.TermStats;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.index.*;
-import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.similarities.*;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.BytesRef;
 import Analyzer.MyAnalyzer;
 
 public class Search {
-
-    private Search() {
-    }
 
     static String indexPath = "index/";
     static String queryPath = "cran/cran.qry";
     static String field = "contents";
 
-    /**
-     * Simple command-line based search demo.
-     */
-    public static void main(String[] args) throws Exception {
+
+//    public static void main(String[] args) throws Exception {
+        public void batchSearch()throws Exception {
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
         IndexSearcher searcher = new IndexSearcher(reader);
         searcher.setSimilarity(new BM25Similarity());
 //        searcher.setSimilarity(new ClassicSimilarity());
-
 
         Analyzer analyzer = new MyAnalyzer();
         QueryParser parser = new QueryParser(field, analyzer);

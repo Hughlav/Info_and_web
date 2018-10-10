@@ -1,5 +1,7 @@
+package ie.tcd.laveryhu.info_and_web;
+
 import data_objects.CranDocument;
-import documentparser.Parser;
+import document_parser.Parser;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.*;
@@ -21,11 +23,11 @@ public class Index
     static IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
     static Parser myParser = new Parser();
 
-    public static void main(String [ ] args){
-        prepare();
-    }
+//    public static void main(String [ ] args){
+//        prepare();
+//    }
 
-    public static void prepare(){
+    public void prepare(){
         try {
             Directory dir = FSDirectory.open(Paths.get(indexPath));
             iwc.setOpenMode(OpenMode.CREATE);
