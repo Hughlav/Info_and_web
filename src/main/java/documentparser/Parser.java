@@ -1,3 +1,4 @@
+package documentparser;
 import data_objects.CranDocument;
 
 import java.io.IOException;
@@ -9,27 +10,22 @@ import java.util.stream.Stream;
 
 public class Parser
 {
-    static String PATH_TO_CRAN = "cran/cran.all.1400";
-
+    static String pathToFile = "";
     private static String docsString = "";
     private static String[] docs;
 
-    private static ArrayList<CranDocument> documents = new ArrayList<>();
+    public ArrayList<CranDocument> documents = new ArrayList<>();
 
-    public static void main(String[] args){
-        System.out.println("Test");
-
+    public void createDocs(String path){
+        pathToFile = path;
         readDocs();
-
         parseDocs();
-
-        System.out.println(documents.get(10).Words);
     }
 
     private static void readDocs() {
         try {
             try (
-                    Stream<String> stream = Files.lines(Paths.get(PATH_TO_CRAN))) {
+                    Stream<String> stream = Files.lines(Paths.get(pathToFile))) {
                 stream.forEach(new Consumer<String>() {
                     public void accept(String line) {
                         docsString = docsString.concat(line + "\n");
@@ -44,7 +40,7 @@ public class Parser
         }
     }
 
-    private static void parseDocs(){
+    private void parseDocs(){
         for(String doc: docs){
             if(!doc.equals("")) {
                 parseDoc(doc);
@@ -52,7 +48,7 @@ public class Parser
         }
     }
 
-    private static void parseDoc(String doc){
+    private void parseDoc(String doc){
         CranDocument document = new CranDocument();
 
         LinkedList<String> docLines = new LinkedList<String>(Arrays.asList(doc.split("\n")));
@@ -66,20 +62,24 @@ public class Parser
 
         for(String line: docLines){
             if(line.startsWith(".T")){
+                line = line.substring(2);
                 currentSection = ".T";
-                document.Title = line;
+                document.Title += "\n" + line;
             }
             else if(line.startsWith(".A")){
+                line = line.substring(2);
                 currentSection = ".A";
-                document.Authors = line;
+                document.Authors += "\n" + line;
             }
             else if(line.startsWith(".B")){
+                line = line.substring(2);
                 currentSection = ".B";
-                document.Bib = line;
+                document.Bib += "\n" + line;
             }
             else if(line.startsWith(".W")){
+                line = line.substring(2);
                 currentSection = ".W";
-                document.Words = line;
+                document.Words += "\n" + line;
             }
             else{
                 addLineToSection(line, currentSection, document);
@@ -88,16 +88,20 @@ public class Parser
         documents.add(document);
     }
 
-    private static void addLineToSection(String line, String section, CranDocument document){
+    private void addLineToSection(String line, String section, CranDocument document){
         switch (section){
             case ".T":
-                document.Title += "\n" + line;
+                document.Title += " " + line;
+                break;
             case ".A":
-                document.Authors += "\n" + line;
+                document.Authors += " " + line;
+                break;
             case ".B":
-                document.Bib += "\n" + line;
+                document.Bib += " " + line;
+                break;
             case ".W":
-                document.Words += "\n" + line;
+                document.Words += " " + line;
+                break;
         }
     }
 }
