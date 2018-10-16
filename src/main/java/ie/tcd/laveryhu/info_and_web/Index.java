@@ -4,6 +4,7 @@ import data_objects.CranDocument;
 import document_parser.Parser;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -20,6 +21,7 @@ public class Index
     static String PATH_TO_CRAN = "cran/cran.all.1400";
     static String indexPath = "index/";
     static Analyzer analyzer = new MyAnalyzer();
+//    static Analyzer analyzer = new EnglishAnalyzer();
     static IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
     static Parser myParser = new Parser();
 

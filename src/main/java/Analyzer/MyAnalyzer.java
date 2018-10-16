@@ -7,6 +7,7 @@ import org.apache.lucene.analysis.StopwordAnalyzerBase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.en.KStemFilter;
+import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.snowball.SnowballFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.tartarus.snowball.ext.PorterStemmer;
@@ -33,7 +34,7 @@ public final class MyAnalyzer extends StopwordAnalyzerBase {
         result = new StopFilter(result, this.stopwords);
 
         result = new KStemFilter(result);
-
+//        result = new PorterStemFilter(result);
         result = new SnowballFilter(result, new PorterStemmer());
         return new TokenStreamComponents(source, result);
     }

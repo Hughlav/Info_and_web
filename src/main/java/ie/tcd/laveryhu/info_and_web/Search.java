@@ -10,6 +10,8 @@ import java.util.List;
 import data_objects.CranDocument;
 import document_parser.Parser;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
@@ -28,10 +30,11 @@ public class Search {
         public void batchSearch()throws Exception {
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
         IndexSearcher searcher = new IndexSearcher(reader);
-        searcher.setSimilarity(new BM25Similarity());
-//        searcher.setSimilarity(new ClassicSimilarity());
+//        searcher.setSimilarity(new BM25Similarity());
+        searcher.setSimilarity(new ClassicSimilarity());
 
         Analyzer analyzer = new MyAnalyzer();
+//        Analyzer analyzer = new EnglishAnalyzer();
         QueryParser parser = new QueryParser(field, analyzer);
 
         parser.setAllowLeadingWildcard(true);
@@ -47,15 +50,20 @@ public class Search {
         for (CranDocument cranQuery : cranQueries) {
             String line = cranQuery.Words;
 
+            System.out.println("Index = " + cranQuery.Index);
             Query query = parser.parse(line);
             System.out.println("Searching for: " + query.toString(field));
 
             TopDocs results = searcher.search(query, 1400);
 
             ScoreDoc[] hits = results.scoreDocs;
-            int rank = 0;
+            int rank = 1;
             for(ScoreDoc doc: hits){
-                lines.add(Integer.toString(queryID) + " Q0 " + Integer.toString(doc.doc) + " " + Integer.toString(rank) + " " + doc.score + " standard");
+
+                Document currDoc = searcher.doc(doc.doc);
+
+//                lines.add(cranQuery.Index + " Q0 " + Integer.toString(doc.doc + 1) + " " + Integer.toString(0) + " " + doc.score + " STANDARD");
+                lines.add(Integer.toString(queryID) + " Q0 " + Integer.toString(doc.doc + 1) + " " + Integer.toString(0) + " " + doc.score + " STANDARD");
 
                 rank++;
             }
