@@ -6,11 +6,10 @@ import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.StopwordAnalyzerBase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
 import org.apache.lucene.analysis.en.KStemFilter;
 import org.apache.lucene.analysis.en.PorterStemFilter;
-import org.apache.lucene.analysis.snowball.SnowballFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.tartarus.snowball.ext.PorterStemmer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +27,14 @@ public final class MyAnalyzer extends StopwordAnalyzerBase {
 
     protected TokenStreamComponents createComponents(String fieldName) {
         Tokenizer source = new StandardTokenizer();
-
-        TokenStream result = new LowerCaseFilter(source);
-
+        TokenStream result = new EnglishPossessiveFilter(source);
+        result = new LowerCaseFilter(result);
         result = new StopFilter(result, this.stopwords);
 
         result = new KStemFilter(result);
-//        result = new PorterStemFilter(result);
-        result = new SnowballFilter(result, new PorterStemmer());
+        result = new PorterStemFilter(result);
         return new TokenStreamComponents(source, result);
+
     }
 
     protected TokenStream normalize(String fieldName, TokenStream in) {
@@ -44,7 +42,7 @@ public final class MyAnalyzer extends StopwordAnalyzerBase {
     }
 
     static {
-        List<String> stopWords = Arrays.asList("a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then", "there", "these", "they", "this", "to", "was", "will", "with", "flow", "what", "boundary", "pressure", "layer", "number");
+        List<String> stopWords = Arrays.asList("a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then", "there", "these", "they", "this", "to", "was", "will", "with", "what", "how");
         CharArraySet stopSet = new CharArraySet(stopWords, false);
         MY_STOP_WORD_SET = CharArraySet.unmodifiableSet(stopSet);
     }

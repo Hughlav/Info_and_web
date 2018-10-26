@@ -10,7 +10,7 @@ import java.util.List;
 import data_objects.CranDocument;
 import document_parser.Parser;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -26,17 +26,13 @@ public class Search {
     static String field = "contents";
 
 
-//    public static void main(String[] args) throws Exception {
         public void batchSearch()throws Exception {
         IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(indexPath)));
         IndexSearcher searcher = new IndexSearcher(reader);
-//        searcher.setSimilarity(new BM25Similarity());
         searcher.setSimilarity(new ClassicSimilarity());
 
         Analyzer analyzer = new MyAnalyzer();
-//        Analyzer analyzer = new EnglishAnalyzer();
         QueryParser parser = new QueryParser(field, analyzer);
-
         parser.setAllowLeadingWildcard(true);
 
         Parser fileParser = new Parser();
@@ -57,20 +53,17 @@ public class Search {
             TopDocs results = searcher.search(query, 1400);
 
             ScoreDoc[] hits = results.scoreDocs;
-            int rank = 1;
             for(ScoreDoc doc: hits){
 
                 Document currDoc = searcher.doc(doc.doc);
 
-//                lines.add(cranQuery.Index + " Q0 " + Integer.toString(doc.doc + 1) + " " + Integer.toString(0) + " " + doc.score + " STANDARD");
                 lines.add(Integer.toString(queryID) + " Q0 " + Integer.toString(doc.doc + 1) + " " + Integer.toString(0) + " " + doc.score + " STANDARD");
 
-                rank++;
             }
             queryID++;
         }
 
-        Path file = Paths.get("trec_eval.8.1/results.txt");
+        Path file = Paths.get("trec_eval.9.0/results.txt");
         Files.write(file, lines, Charset.forName("UTF-8"));
 
         reader.close();
