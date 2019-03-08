@@ -1,7 +1,14 @@
-To build the project simply run "make build" from info_and_web directory
+To build the project run "make build" from info_and_web directory
 
-To index and run the batch queries simply run "make run"
+To index and run the batch queries run "make run"
 
 To run the evaluations with trec eval:
     cd into the trec folder "cd trec_eval.8.1"
     and run "./trec_eval QRelsCorrectedforTRECeval results.txt"
+    
+    
+    ----------------------------------------------------------------------------------
+    
+    This project was to build a build a search engine with lucene using a corpus of documents from a CRAN collection. 
+    The engine was then evaluated against a number of queries which I have the ground truth in the QRelsCorrectedforTRECeval file.
+    It was build as course work for my "Information retrieval and web search" module.
